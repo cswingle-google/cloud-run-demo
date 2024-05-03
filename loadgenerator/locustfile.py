@@ -43,9 +43,9 @@ class EditorLoadUser(HttpUser):
         self.client.get("/", headers={"authorization": "Bearer " + creds})
 
     def _get_creds(self):
-        url = os.environ.get("EDITOR_UPSTREAM_RENDER_URL")
+        url = os.environ.get("FRONTEND_URL")
         if not url:
-            raise Exception("EDITOR_UPSTREAM_RENDER_URL missing")
+            raise Exception("FRONTEND_URL missing")
         request = google.auth.transport.requests.Request()
 
         return google.oauth2.id_token.fetch_id_token(request, url)

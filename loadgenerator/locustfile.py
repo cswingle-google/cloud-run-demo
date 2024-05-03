@@ -1,7 +1,5 @@
 import os
 from locust import HttpUser, task, between
-import google.auth.transport.requests
-import google.oauth2.id_token
 
 
 class EditorLoadUser(HttpUser):
@@ -22,14 +20,14 @@ class EditorLoadUser(HttpUser):
             headers={"authorization": "Bearer " + creds},
         )
 
-    @task(os.getenv("ERROR_RATE", 1, type=int))
+    @task(int(os.getenv("ERROR_RATE", 1)))
     def error_400(self):
         creds = self._get_creds()
         self.client.post(
             "/render", headers={"authorization": "Bearer " + creds}
         )
 
-    @task(os.getenv("ERROR_RATE", 1, type=int))
+    @task(int(os.getenv("ERROR_RATE", 1)))
     def error_500(self):
         creds = self._get_creds()
         self.client.post(
@@ -43,9 +41,4 @@ class EditorLoadUser(HttpUser):
         self.client.get("/", headers={"authorization": "Bearer " + creds})
 
     def _get_creds(self):
-        url = os.environ.get("FRONTEND_ADDR")
-        if not url:
-            raise Exception("FRONTEND_ADDR missing")
-        request = google.auth.transport.requests.Request()
-
-        return google.oauth2.id_token.fetch_id_token(request, url)
+        return os.popen("gcloud auth print-identity-token").read().strip()

@@ -26,6 +26,8 @@ app = Flask(__name__)
 def index():
     """Parses the markdown and outputs the formatted HTML"""
     data = request.get_data(as_text=True)
+    if data == "500":
+        raise Exception("500 error")
     html = markdown.markdown(data)
 
     # Keep the paragraph tags

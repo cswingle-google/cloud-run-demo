@@ -18,7 +18,7 @@ class EditorLoadUser(HttpUser):
         creds = self._get_creds()
         self.client.post(
             "/render",
-            json={"data": "# Hello, world!"},
+            json={"data": "**Hello, world!**"},
             headers={"authorization": "Bearer " + creds},
         )
 
@@ -43,9 +43,9 @@ class EditorLoadUser(HttpUser):
         self.client.get("/", headers={"authorization": "Bearer " + creds})
 
     def _get_creds(self):
-        url = os.environ.get("FRONTEND_URL")
+        url = os.environ.get("FRONTEND_ADDR")
         if not url:
-            raise Exception("FRONTEND_URL missing")
+            raise Exception("FRONTEND_ADDR missing")
         request = google.auth.transport.requests.Request()
 
         return google.oauth2.id_token.fetch_id_token(request, url)

@@ -6,3 +6,7 @@ Our loadgenerator sends a request even 5-10 seconds (with 10 users). We can cont
 or by submitting just the text `500` to get `500` errors.
 
 Main services taken from <https://cloud.google.com/run/docs/tutorials/secure-services>.
+
+## Running the Load Generator
+
+`locust --host="https://editor-tijmzgsxza-uc.a.run.app" --headless -u "${USERS:-10}" 2>&1`
